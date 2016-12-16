@@ -65,6 +65,7 @@ function sign(json) {
     var signature1 = nacl.sign(msg_hash_buffer, privKey1)
     var signBuffer = new Buffer(signature1)
     return signBuffer.toString("hex");
+    // return signBuffer;
 
     // console.log(signature1)
     // console.log(typeof(signature1))

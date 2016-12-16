@@ -82,8 +82,11 @@ function createNew(data, cb) {
     TxInput.signature = sign(txParams)
 
     const tx = {
-        inputs: [TxInput],
-        outputs: [TxOutput]
+        input: TxInput,
+        address: accountData.address,
+        gas_limit: 10000,
+        fee: 100,
+        data: txParams.data
     }
     try {
         edb.txs().broadcastTx(tx, function(error, address) {
@@ -108,18 +111,18 @@ const contractFactory = manager.newContractFactory(abi)
 //   console.log('==========================')
 // })
 
-// createNew({
-//     data: compiled.bytecode
-// }, (err, data) => {
-//     edb.txs().getUnconfirmedTxs(console.log)
-//     console.log('==========================')
-//     console.log(err, data)
-//     console.log('==========================')
-// })
-
-const tr = contractFactory.at('0000000000000000000000000000000000000000')
-tr.add(1, 2, (err, num) => {
-  console.log('==========================')
-  console.log(num.toNumber())
-  console.log('==========================')
+createNew({
+    data: compiled.bytecode
+}, (err, data) => {
+    edb.txs().getUnconfirmedTxs(console.log)
+    console.log('==========================')
+    console.log(err, data)
+    console.log('==========================')
 })
+
+// const tr = contractFactory.at('0000000000000000000000000000000000000000')
+// tr.add(1, 2, (err, num) => {
+//   console.log('==========================')
+//   console.log(num.toNumber())
+//   console.log('==========================')
+// })

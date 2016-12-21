@@ -94,12 +94,12 @@ function createNew(data, cb) {
     try {
         edb.txs().broadcastTx(tx, function(error, address) {
             if (error)
-                callback(error);
+                return callback(error);
 
             // else
             //     that.at(address, callback);
             // }
-            callback(error, address)
+            return callback(error, address)
         });
     } catch (error) {
         callback(error);

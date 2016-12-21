@@ -108,20 +108,20 @@ function createNew(data, cb) {
 
 
 const contractFactory = manager.newContractFactory(abi)
-contractFactory.new({ data: compiled.bytecode }, (err, data) => {
-  console.log('==========================')
-  console.log(err, data)
-  console.log('==========================')
-})
-
-// createNew({
-//     data: compiled.bytecode
-// }, (err, data) => {
-//     edb.txs().getUnconfirmedTxs(console.log)
-//     console.log('==========================')
-//     console.log(err, data)
-//     console.log('==========================')
+// contractFactory.new({ data: compiled.bytecode }, (err, data) => {
+//   console.log('==========================')
+//   console.log(err, data)
+//   console.log('==========================')
 // })
+
+createNew({
+    data: compiled.bytecode
+}, (err, data) => {
+    edb.txs().getUnconfirmedTxs(console.log)
+    console.log('==========================')
+    console.log(err, data)
+    console.log('==========================')
+})
 
 // const tr = contractFactory.at('0000000000000000000000000000000000000000')
 // tr.add(1, 2, (err, num) => {

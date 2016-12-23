@@ -88,7 +88,7 @@ function createNew(data, cb) {
         data: data.data
     }
     // sign transaction
-    tx.input.signature = [1, sign(tx)]
+    tx.input.signature = [2, sign(tx)]
 
     // Try to send signed transaction into eris-db
     try {

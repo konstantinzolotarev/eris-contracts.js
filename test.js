@@ -45,7 +45,7 @@ const TxInput = {
     amount: 100,
     sequence: 0,
     signature: '',
-    pub_key: accountData.pubKey
+    pub_key: [1, accountData.pubKey]
 }
 
 const TxOutput = {
@@ -88,7 +88,7 @@ function createNew(data, cb) {
         data: data.data
     }
     // sign transaction
-    tx.input.signature = sign(tx)
+    tx.input.signature = [2, sign(tx)]
 
     // Try to send signed transaction into eris-db
     try {

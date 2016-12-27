@@ -54,17 +54,12 @@ const TxOutput = {
 }
 
 function sign(json) {
-    var keccak_256 = require('js-sha3').keccak_256;
-    var crypto = require('crypto');
-    var secp256k1 = require('secp256k1');
+    const crypto = require('tendermint-crypto')
+    const PrivKeyEd25519 = crypto.PrivKeyEd25519
+    const userKey = new PrivKeyEd25519(new Buffer(accountData.privKey, "hex"))
 
     //gen sig
-    var privKey1 = new Buffer(accountData.privKey, "hex");
-    var msg_hash = keccak_256(JSON.stringify(json));
-    var msg_hash_buffer = new Buffer(msg_hash, "hex");
-    var signature1 = nacl.sign(msg_hash_buffer, privKey1)
-    var signBuffer = new Buffer(signature1)
-    return signBuffer.toString("hex");
+    return userKey.signString(JSON.stringify(json))
     // return signBuffer;
 
     // console.log(signature1)
@@ -88,7 +83,8 @@ function createNew(data, cb) {
         data: data.data
     }
     // sign transaction
-    tx.input.signature = [2, sign(tx)]
+    tx.input.signature = sign(tx)
+    // tx.input.signature[0] = 2
 
     // Try to send signed transaction into eris-db
     try {

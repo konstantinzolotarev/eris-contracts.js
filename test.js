@@ -4,38 +4,29 @@ const contractName = 'SimpleContract'
 const solContract = `
 
   contract ${contractName} {
-      address storedData;
 
-      function set(address x) {
-          storedData = x;
-      }
-
-      function get() constant returns (address retVal) {
-          return storedData;
-      }
+    function add(int a, int b) constant returns (int sum) {
+        sum = a + b;
+    }
   }
 `
 
 const Solidity = require('solc')
-const _ = require('lodash')
 const erisC = require('./index')
-var edbFactory = require('eris-db');
-var edb = edbFactory.createInstance("http://127.0.0.1:1337/rpc");
+// Create eris-db connection
+const edbFactory = require('eris-db');
+const edb = edbFactory.createInstance("http://127.0.0.1:1337/rpc");
 
-const nacl = require('tweetnacl')
-
+// Getting priv key for user and address
 const validator = require(process.env.HOME + '/.eris/chains/simplechain/priv_validator.json')
 const accountData = {
     address: validator.address,
     pubKey: validator.pub_key,
     privKey: validator.priv_key
 }
-const manager = erisC.newContractManagerDev('http://localhost:1337/rpc', accountData)
-
+// Compile contract
 const compiled = Solidity.compile(solContract, 1).contracts[contractName]
 const abi = JSON.parse(compiled.interface)
-
-var coder = require('web3/lib/solidity/coder')
 
 function sign(json) {
     const crypto = require('tendermint-crypto')
@@ -47,19 +38,11 @@ function sign(json) {
     // const valid = userKey.makePubKey().verifyString(JSON.stringify(json), signed)
 
     return signed
-    // return signBuffer;
-
-    // console.log(signature1)
-    // console.log(typeof(signature1))
-
-    // json.sig = signature1;
-    // json.msg = msg_hash_buffer.toString("hex");
-    // return signature1
 }
 
 function createNew(data, cb) {
     // parse arguments
-    var callback = cb || _.noop;
+    var callback = cb || function () {}
 
     const tx = {
         Input: {
@@ -73,13 +56,10 @@ function createNew(data, cb) {
         Fee: 123,
         Data: data.data
     }
-    const signed = sign(tx)
     // sign transaction
-    // tx.input = TxInput
+    const signed = sign(tx)
     tx.Input.Signature = signed
-    // tx.input.signature[0] = 2
-    // edb.blockchain().getChainId(console.log)
-    // edb.accounts().getAccounts(console.log)
+
     // Try to send signed transaction into eris-db
     try {
         edb.txs().broadcastTx(tx, function(error, address) {
@@ -96,8 +76,8 @@ function createNew(data, cb) {
     }
 }
 
-
-const contractFactory = manager.newContractFactory(abi)
+// const manager = erisC.newContractManagerDev('http://localhost:1337/rpc', accountData)
+// const contractFactory = manager.newContractFactory(abi)
 // contractFactory.new({ data: compiled.bytecode }, (err, data) => {
 //   console.log('==========================')
 //   console.log(err, data)

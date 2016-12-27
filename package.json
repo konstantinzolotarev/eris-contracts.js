@@ -1,6 +1,6 @@
 {
   "name": "eris-contracts",
-  "version": "0.15.7",
+  "version": "0.15.8",
   "scripts": {
     "doc": "jsdoc --configure JSDoc/conf.json --destination doc README.md lib",
     "publish": "bundle-dependencies update && publish",
@@ -8,31 +8,28 @@
     "test": "mocha --reporter mocha-circleci-reporter test/integration"
   },
   "dependencies": {
-    "@nodeguy/generic": "^2.1.1",
-    "@nodeguy/type": "^0.1.0",
-    "bignumber.js": "debris/bignumber.js#master",
-    "bluebird": "^3.3.3",
-    "crypto-js": "^3.1.4",
-    "eris-db": "^0.15.4",
-    "iteray": "^0.5.1",
-    "js-sha3": "^0.5.5",
-    "ramda": "^0.21.0",
-    "secp256k1": "^3.2.2",
-    "utf8": "^2.1.1",
+    "@nodeguy/generic": "2.1.1",
+    "@nodeguy/type": "0.1.0",
+    "bignumber.js": "debris/bignumber.js#94d7146671b9719e00a09c29b01a691bc85048c2",
+    "bluebird": "3.3.3",
+    "crypto-js": "3.1.4",
+    "eris-db": "0.15.8",
+    "iteray": "0.5.1",
+    "ramda": "0.21.0",
+    "utf8": "2.1.1",
     "web3": "eris-ltd/web3.js#cdf7bec7417988f9587d808796eb2872e0a8df23"
   },
   "devDependencies": {
-    "bundle-dependencies": "^1.0.2",
-    "ink-docstrap": "~1.2.1",
-    "istanbul": "^0.4.3",
-    "jsdoc": "^3.4.0",
-    "mocha": "^3.0.2",
+    "bundle-dependencies": "1.0.2",
+    "ink-docstrap": "1.2.1",
+    "istanbul": "0.4.3",
+    "jsdoc": "3.4.0",
+    "mocha": "3.0.2",
     "mocha-circleci-reporter": "0.0.1",
-    "publish": "^0.6.0",
-    "request": "^2.75.0",
-    "request-promise": "^4.1.1",
-    "solc": "^0.3.4",
-    "sync-modules": "^0.1.0"
+    "publish": "0.6.0",
+    "request": "2.75.0",
+    "request-promise": "4.1.1",
+    "solc": "0.3.4"
   },
   "repository": {
     "type": "git",

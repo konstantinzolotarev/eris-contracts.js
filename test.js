@@ -1,12 +1,18 @@
 'use strict'
 
+const contractName = 'SimpleContract'
 const solContract = `
 
-  contract Test {
+  contract ${contractName} {
+      address storedData;
 
-    function add(int a, int b) constant returns (int sum) {
-        sum = a + b;
-    }
+      function set(address x) {
+          storedData = x;
+      }
+
+      function get() constant returns (address retVal) {
+          return storedData;
+      }
   }
 `
 
@@ -26,32 +32,10 @@ const accountData = {
 }
 const manager = erisC.newContractManagerDev('http://localhost:1337/rpc', accountData)
 
-const compiled = Solidity.compile(solContract, 1).contracts['Test']
+const compiled = Solidity.compile(solContract, 1).contracts[contractName]
 const abi = JSON.parse(compiled.interface)
 
 var coder = require('web3/lib/solidity/coder')
-
-var txParams = {
-    nonce: '0',
-    // gasPrice: '0x09184e72a000',
-    // gasLimit: '0x2710',
-    to: '0000000000000000000000000000000000000000',
-    value: '0',
-    data: ''
-}
-
-const TxInput = {
-    address: accountData.address,
-    amount: 100,
-    sequence: 0,
-    signature: '',
-    pub_key: [1, accountData.pubKey]
-}
-
-const TxOutput = {
-    address: '0000000000000000000000000000000000000000',
-    amount: 100
-}
 
 function sign(json) {
     const crypto = require('tendermint-crypto')
@@ -59,7 +43,10 @@ function sign(json) {
     const userKey = new PrivKeyEd25519(new Buffer(accountData.privKey, "hex"))
 
     //gen sig
-    return userKey.signString(JSON.stringify(json))
+    const signed = userKey.signString(JSON.stringify(json))
+    // const valid = userKey.makePubKey().verifyString(JSON.stringify(json), signed)
+
+    return signed
     // return signBuffer;
 
     // console.log(signature1)
@@ -74,18 +61,25 @@ function createNew(data, cb) {
     // parse arguments
     var callback = cb || _.noop;
 
-    txParams.data = data.data
     const tx = {
-        input: TxInput,
-        address: accountData.address,
-        gas_limit: 10000,
-        fee: 100,
-        data: data.data
+        Input: {
+          Address: accountData.address,
+          Amount: 100,
+          Sequence: 124
+        },
+        // Address: accountData.address,
+        Address: '',
+        GasLimit: 223,
+        Fee: 123,
+        Data: data.data
     }
+    const signed = sign(tx)
     // sign transaction
-    tx.input.signature = sign(tx)
+    // tx.input = TxInput
+    tx.Input.Signature = signed
     // tx.input.signature[0] = 2
-
+    // edb.blockchain().getChainId(console.log)
+    // edb.accounts().getAccounts(console.log)
     // Try to send signed transaction into eris-db
     try {
         edb.txs().broadcastTx(tx, function(error, address) {
@@ -110,10 +104,13 @@ const contractFactory = manager.newContractFactory(abi)
 //   console.log('==========================')
 // })
 
+// edb.accounts().getAccounts(console.log)
+
 createNew({
     data: compiled.bytecode
 }, (err, data) => {
-    edb.txs().getUnconfirmedTxs(console.log)
+    // edb.txs().getUnconfirmedTxs(console.log)
+    edb.accounts().getAccounts(console.log)
     console.log('==========================')
     console.log(err, data)
     console.log('==========================')

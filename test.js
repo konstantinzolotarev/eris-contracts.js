@@ -36,8 +36,9 @@ function sign(json) {
     //gen sig
     const signed = userKey.signString(JSON.stringify(json))
     // const valid = userKey.makePubKey().verifyString(JSON.stringify(json), signed)
+    // console.log("Valid: ", valid)
 
-    return signed
+    return signed.toJSON()
 }
 
 function createNew(data, cb) {
@@ -45,20 +46,24 @@ function createNew(data, cb) {
     var callback = cb || function () {}
 
     const tx = {
-        Input: {
-          Address: accountData.address,
-          Amount: 100,
-          Sequence: 124
+        // address: accountData.address,
+        address: '',
+        data: data.data,
+        fee: 12,
+        gasLimit: 223,
+        input: {
+            address: accountData.address,
+            amount: 100,
+            sequence: 1
         },
-        // Address: accountData.address,
-        Address: '',
-        GasLimit: 223,
-        Fee: 123,
-        Data: data.data
     }
     // sign transaction
     const signed = sign(tx)
-    tx.Input.Signature = signed
+
+    tx.input.signature = signed
+    tx.input.pub_key = [1, accountData.pubKey]
+
+    console.log(tx);
 
     // Try to send signed transaction into eris-db
     try {

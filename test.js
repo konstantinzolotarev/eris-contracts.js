@@ -48,17 +48,36 @@ function createNew(data, cb) {
     const tx = {
         // address: accountData.address,
         address: '',
-        data: data.data,
+        data: data.data.toUpperCase(),
         fee: 12,
-        gasLimit: 223,
+        gas_limit: 223,
         input: {
             address: accountData.address,
             amount: 100,
             sequence: 1
         },
-    }
+    };
+
+    const txForSigning = {
+        chain_id: "simplechain",
+        tx: [
+            2,
+            {
+                address: tx.address,
+                data: tx.data,
+                fee: tx.fee,
+                gas_limit: tx.gas_limit,
+                input: {
+                    address: tx.input.address,
+                    amount: tx.input.amount,
+                    sequence: tx.input.sequence
+                }
+            }
+        ]
+    };
+
     // sign transaction
-    const signed = sign(tx)
+    const signed = sign(txForSigning)
 
     tx.input.signature = signed
     tx.input.pub_key = [1, accountData.pubKey]

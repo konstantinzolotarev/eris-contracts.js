@@ -1,10 +1,20 @@
-Please include all code and data needed to reproduce the problem by replacing the examples below.
+# Version Numbers
+
+Fill in version numbers below.
+
+* Node.js:
+* Eris CLI:
+* eris-contracts: 
 
 # Issue Description
 
 Describe your issue here.
 
-# Solidity
+# Code
+
+Include all code and data needed to reproduce the problem by replacing the examples below.
+
+## Solidity
 
 ```Solidity
 contract IdisContractsFTW {
@@ -20,7 +30,7 @@ contract IdisContractsFTW {
 }
 ```
 
-# JavaScript
+## JavaScript
 
 ```JavaScript
 // requires

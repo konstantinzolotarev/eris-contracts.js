@@ -1,32 +1,31 @@
-#!/usr/bin/env sh
+#!/bin/sh
+set -o errexit
+set -o xtrace
 
-# Publish documentation to the Eris website.
+# Publish documentation to the Monax website.
 
-name=$(basename $PWD)
-docs_site=docs.erisindustries.com
-repo=$PWD
-release_min=$(cat package.json | jq --raw-output .version)
+name=contracts.js
+repository=monax.io
+doc=$PWD/doc
+
+# Use only the major and minor version numbers.
+version=$(jq --raw-output .version package.json | cut -d . -f 1-2)
 
 # Build
-
 npm run doc
-
 cd $HOME
-git clone git@github.com:eris-ltd/$docs_site.git
-cd $docs_site/documentation
+git clone git@github.com:eris-ltd/$repository.git
+cd $repository/content/docs/documentation
 mkdir --parents $name
 cd $name
-mv $repo/doc $release_min
-ln --symbolic $release_min latest
+rm --force --recursive $version
+mv $doc $version
+rm --force latest
+ln --symbolic $version latest
 
-# Commit and push if there are changes.
-
-if [ -z "$(git status --porcelain)" ]; then
-  echo "All Good!"
-else
-  git config --global user.email "billings@erisindustries.com"
-  git config --global user.name "Billings the Bot"
-  git add -A :/ &&
-  git commit --message "$name build number $CIRCLE_BUILD_NUM doc generation" &&
-  git push origin master
-fi
+# Commit and push.
+git config user.name "Billings the Bot"
+git config user.email "Billings@Monax.io"
+git add --all
+git commit --message "$name build number $CIRCLE_BUILD_NUM doc generation"
+git push origin staging

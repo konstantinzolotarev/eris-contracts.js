@@ -1,11 +1,13 @@
 {
   "name": "eris-contracts",
-  "version": "0.15.8",
-  "scripts": {
-    "doc": "jsdoc --configure JSDoc/conf.json --destination doc README.md lib",
-    "publish": "bundle-dependencies update && publish",
-    "pretest": "eris chains make blockchain",
-    "test": "mocha --reporter mocha-circleci-reporter test/integration"
+  "description": "Library with javascript bindings for Solidity contracts.",
+  "version": "0.15.9",
+  "author": {
+    "name": "Andreas Olofsson",
+    "email": "andreas@erisindustries.com"
+  },
+  "bugs": {
+    "url": "https://github.com/eris-ltd/eris-contracts.js/issues"
   },
   "dependencies": {
     "@nodeguy/generic": "2.1.1",
@@ -13,7 +15,7 @@
     "bignumber.js": "debris/bignumber.js#94d7146671b9719e00a09c29b01a691bc85048c2",
     "bluebird": "3.3.3",
     "crypto-js": "3.1.4",
-    "eris-db": "0.15.8",
+    "eris-db": "0.15.9",
     "iteray": "0.5.1",
     "ramda": "0.21.0",
     "utf8": "2.1.1",
@@ -23,7 +25,7 @@
     "bundle-dependencies": "1.0.2",
     "ink-docstrap": "1.2.1",
     "istanbul": "0.4.3",
-    "jsdoc": "3.4.0",
+    "jsdoc": "3.4.3",
     "mocha": "3.0.2",
     "mocha-circleci-reporter": "0.0.1",
     "publish": "0.6.0",
@@ -31,34 +33,34 @@
     "request-promise": "4.1.1",
     "solc": "0.3.4"
   },
+  "engines": {
+    "node": ">=6"
+  },
+  "homepage": "https://github.com/eris-ltd/eris-contracts.js",
+  "keywords": [
+    "Monax",
+    "eris",
+    "eris-db",
+    "solidity"
+  ],
+  "license": "LGPL-3.0",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "David Braun",
+      "email": "David@Monax.io"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/eris-ltd/eris-contracts.js"
   },
-  "homepage": "https://github.com/eris-ltd/eris-contracts.js",
-  "bugs": {
-    "url": "https://github.com/eris-ltd/eris-contracts.js/issues"
+  "scripts": {
+    "doc": "jsdoc --configure JSDoc/conf.json --destination doc index.js lib README.md",
+    "pretest": "eris chains make blockchain",
+    "publish": "bundle-dependencies update && publish",
+    "test": "mocha --reporter mocha-circleci-reporter test/integration"
   },
-  "keywords": [
-    "eris",
-    "solidity",
-    "node.js",
-    "dapp",
-    "tendermint",
-    "eris-db",
-    "RPC"
-  ],
-  "author": {
-    "name": "Andreas Olofsson",
-    "email": "andreas@erisindustries.com"
-  },
-  "maintainers": [
-    {
-      "name": "David Braun",
-      "email": "David@ErisIndustries.com"
-    }
-  ],
-  "license": "LGPL-3.0",
   "standard": {
     "globals": [
       "after",

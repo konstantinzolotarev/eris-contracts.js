@@ -12,7 +12,7 @@ const solContract = `
 `
 
 const Solidity = require('solc')
-const erisC = require('./index')
+// const erisC = require('./index')
 // Create eris-db connection
 const edbFactory = require('eris-db');
 const edb = edbFactory.createInstance("http://127.0.0.1:1337/rpc");
@@ -24,6 +24,7 @@ const accountData = {
     pubKey: validator.pub_key,
     privKey: validator.priv_key
 }
+
 // Compile contract
 const compiled = Solidity.compile(solContract, 1).contracts[contractName]
 const abi = JSON.parse(compiled.interface)
@@ -31,14 +32,18 @@ const abi = JSON.parse(compiled.interface)
 function sign(json) {
     const crypto = require('tendermint-crypto')
     const PrivKeyEd25519 = crypto.PrivKeyEd25519
-    const userKey = new PrivKeyEd25519(new Buffer(accountData.privKey, "hex"))
+    const privKey = new PrivKeyEd25519(new Buffer(accountData.privKey[1], "hex"))
 
     //gen sig
-    const signed = userKey.signString(JSON.stringify(json))
-    // const valid = userKey.makePubKey().verifyString(JSON.stringify(json), signed)
-    // console.log("Valid: ", valid)
+    try {
+      const signed = privKey.signString(JSON.stringify(json))
+      // const valid = privKey.makePubKey().verifyString(JSON.stringify(json), signed)
+      // console.log("Valid: ", valid)
 
-    return signed.toJSON()
+      return signed.toJSON()
+    } catch(err) {
+      console.error(err)
+    }
 }
 
 function createNew(data, cb) {
@@ -80,9 +85,8 @@ function createNew(data, cb) {
     const signed = sign(txForSigning)
 
     tx.input.signature = signed
-    tx.input.pub_key = [1, accountData.pubKey]
-
-    console.log(tx);
+    // tx.input.pub_key = [1, accountData.pubKey]
+    tx.input.pub_key = accountData.pubKey
 
     // Try to send signed transaction into eris-db
     try {
@@ -114,7 +118,7 @@ createNew({
     data: compiled.bytecode
 }, (err, data) => {
     // edb.txs().getUnconfirmedTxs(console.log)
-    edb.accounts().getAccounts(console.log)
+    // edb.accounts().getAccounts(console.log)
     console.log('==========================')
     console.log(err, data)
     console.log('==========================')

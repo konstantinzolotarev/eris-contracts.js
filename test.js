@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash')
 const contractName = 'SimpleContract'
 const solContract = `
 
@@ -12,7 +13,7 @@ const solContract = `
 `
 
 const Solidity = require('solc')
-// const erisC = require('./index')
+const erisC = require('./index')
 // Create eris-db connection
 const edbFactory = require('eris-db');
 const edb = edbFactory.createInstance("http://127.0.0.1:1337/rpc");
@@ -59,7 +60,7 @@ function createNew(data, cb) {
         input: {
             address: accountData.address,
             amount: 100,
-            sequence: 1
+            sequence: 9
         },
     };
 
@@ -104,7 +105,7 @@ function createNew(data, cb) {
     }
 }
 
-// const manager = erisC.newContractManagerDev('http://localhost:1337/rpc', accountData)
+// const manager = erisC.newContractManagerDev('http://localhost:1337/rpc', _.clone(accountData))
 // const contractFactory = manager.newContractFactory(abi)
 // contractFactory.new({ data: compiled.bytecode }, (err, data) => {
 //   console.log('==========================')
@@ -122,11 +123,15 @@ createNew({
     console.log('==========================')
     console.log(err, data)
     console.log('==========================')
-})
 
-// const tr = contractFactory.at('0000000000000000000000000000000000000000')
-// tr.add(1, 2, (err, num) => {
-//   console.log('==========================')
-//   console.log(num.toNumber())
-//   console.log('==========================')
-// })
+    if (err)
+      return
+
+    // console.log('Calling method from contract')
+    // const tr = contractFactory.at(data.contract_addr)
+    // tr.add(1, 2, (err, num) => {
+    //   console.log('==========================')
+    //   console.log(num.toNumber())
+    //   console.log('==========================')
+    // })
+})
